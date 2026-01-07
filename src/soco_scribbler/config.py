@@ -56,6 +56,7 @@ def get_config():
         "LASTFM_PASSWORD": os.getenv("LASTFM_PASSWORD"),
         "LASTFM_API_KEY": os.getenv("LASTFM_API_KEY"),
         "LASTFM_API_SECRET": os.getenv("LASTFM_API_SECRET"),
+        "LASTFM_API_URL": os.getenv("LASTFM_API_URL"),
         # Scrobbling settings
         "SCROBBLE_INTERVAL": int(os.getenv("SCROBBLE_INTERVAL", "1")),  # seconds
         "SPEAKER_REDISCOVERY_INTERVAL": int(
@@ -75,6 +76,7 @@ LASTFM_USERNAME = os.getenv("LASTFM_USERNAME")
 LASTFM_PASSWORD = os.getenv("LASTFM_PASSWORD")
 LASTFM_API_KEY = os.getenv("LASTFM_API_KEY")
 LASTFM_API_SECRET = os.getenv("LASTFM_API_SECRET")
+LASTFM_API_URL = os.getenv("LASTFM_API_URL")
 
 # Scrobbling settings
 SCROBBLE_INTERVAL = int(os.getenv("SCROBBLE_INTERVAL", "1"))  # seconds
