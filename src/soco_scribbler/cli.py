@@ -20,6 +20,7 @@ from .config import (
     OP_CREDENTIALS_FILE,
     ensure_user_dirs,
 )
+from .sonos_lastfm import create_lastfm_network
 
 # Make keyring truly optional
 try:
@@ -523,6 +524,7 @@ def get_lastfm_network() -> Optional[pylast.LastFMNetwork]:
     password = get_stored_credential("password")
     api_key = get_stored_credential("api_key")
     api_secret = get_stored_credential("api_secret")
+    api_url = os.getenv("LASTFM_API_URL")
 
     if not all([username, password, api_key, api_secret]):
         rich.print(
@@ -531,11 +533,12 @@ def get_lastfm_network() -> Optional[pylast.LastFMNetwork]:
         return None
 
     try:
-        return pylast.LastFMNetwork(
+        return create_lastfm_network(
             api_key=api_key,
             api_secret=api_secret,
             username=username,
-            password_hash=pylast.md5(password),
+            password=password,
+            api_url=api_url,
         )
     except Exception as e:
         rich.print(f"[red]Error:[/red] Failed to initialize Last.fm network: {e}")

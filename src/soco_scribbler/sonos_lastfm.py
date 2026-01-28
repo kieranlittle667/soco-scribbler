@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Sonos to Last.fm scrobbler using uv for dependency management."""
 
+import inspect
 import json
 import logging
 import time
@@ -40,6 +41,46 @@ def assert_not_none(value: str | None, name: str) -> str:
         custom_print(msg, "ERROR")
         raise ValueError(msg)
     return value
+
+
+def create_lastfm_network(
+    api_key: str,
+    api_secret: str,
+    username: str,
+    password: str,
+    api_url: str | None = None,
+) -> pylast.LastFMNetwork:
+    """Create a Last.fm network client.
+
+    Args:
+        api_key: Last.fm API key
+        api_secret: Last.fm API secret
+        username: Last.fm username
+        password: Last.fm password
+        api_url: Optional Last.fm API URL override
+
+    Returns:
+        Initialized Last.fm network client
+    """
+    network_kwargs: dict[str, str] = {
+        "api_key": api_key,
+        "api_secret": api_secret,
+        "username": username,
+        "password_hash": pylast.md5(password),
+    }
+
+    if api_url:
+        parameters = inspect.signature(pylast.LastFMNetwork.__init__).parameters
+        if "api_url" in parameters:
+            network_kwargs["api_url"] = api_url
+        else:
+            custom_print(
+                "LASTFM_API_URL is set but pylast does not support api_url; "
+                "using the default endpoint.",
+                "WARNING",
+            )
+
+    return pylast.LastFMNetwork(**network_kwargs)
 
 
 # Configure logging
@@ -94,15 +135,14 @@ class SonosScrobbler:
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
         # Initialize Last.fm network
-        self.network: Final[pylast.LastFMNetwork] = pylast.LastFMNetwork(
+        self.network: Final[pylast.LastFMNetwork] = create_lastfm_network(
             api_key=assert_not_none(config["LASTFM_API_KEY"], "LASTFM_API_KEY"),
             api_secret=assert_not_none(
                 config["LASTFM_API_SECRET"], "LASTFM_API_SECRET"
             ),
             username=assert_not_none(config["LASTFM_USERNAME"], "LASTFM_USERNAME"),
-            password_hash=pylast.md5(
-                assert_not_none(config["LASTFM_PASSWORD"], "LASTFM_PASSWORD")
-            ),
+            password=assert_not_none(config["LASTFM_PASSWORD"], "LASTFM_PASSWORD"),
+            api_url=config.get("LASTFM_API_URL"),
         )
 
         # Store config values we'll need later

@@ -186,6 +186,7 @@ You can configure the scrobbler in several ways (in order of precedence):
    export LASTFM_PASSWORD=your_password
    export LASTFM_API_KEY=your_api_key
    export LASTFM_API_SECRET=your_api_secret
+   export LASTFM_API_URL=https://ws.audioscrobbler.com/2.0/
    export SCROBBLE_INTERVAL=1
    export SPEAKER_REDISCOVERY_INTERVAL=10
    export SCROBBLE_THRESHOLD_PERCENT=25
@@ -212,6 +213,7 @@ You can configure the scrobbler in several ways (in order of precedence):
    LASTFM_PASSWORD=your_password
    LASTFM_API_KEY=your_api_key
    LASTFM_API_SECRET=your_api_secret
+   LASTFM_API_URL=https://ws.audioscrobbler.com/2.0/
    ```
    The CLI loads this file automatically on startup.
 
@@ -225,6 +227,7 @@ You can configure the scrobbler in several ways (in order of precedence):
    LASTFM_PASSWORD=your_password
    LASTFM_API_KEY=your_api_key
    LASTFM_API_SECRET=your_api_secret
+   LASTFM_API_URL=https://ws.audioscrobbler.com/2.0/
    ```
 
 2. Run with Docker Compose:
